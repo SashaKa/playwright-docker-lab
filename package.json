@@ -1,0 +1,20 @@
+{
+  "name": "playwright-docker-lab",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Learning project: UI + API tests with Playwright (TypeScript), run locally, in Docker and in GitHub Actions",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:chromium": "playwright test --project=chromium",
+    "report": "playwright show-report",
+    "codegen": "playwright codegen https://www.saucedemo.com",
+    "typecheck": "tsc --noEmit",
+    "docker:test": "docker compose run --rm tests"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.65.1",
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0"
+  }
+}

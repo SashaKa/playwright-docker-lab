@@ -1,0 +1,34 @@
+name: e2e
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    # Same image as the local Dockerfile: identical environment locally and in CI.
+    container:
+      image: mcr.microsoft.com/playwright:v1.65.1-noble
+      options: --ipc=host
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [chromium, firefox, mobile]
+    steps:
+      - uses: actions/checkout@v4
+      # Node is already inside the Playwright image
+      - run: npm ci
+      - run: npx tsc --noEmit
+      - run: npx playwright test --project=${{ matrix.project }}
+        env:
+          HOME: /root
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report-${{ matrix.project }}
+          path: playwright-report/
+          retention-days: 14

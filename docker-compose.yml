@@ -1,0 +1,12 @@
+services:
+  tests:
+    build: .
+    ipc: host          # recommended for Chromium in Docker
+    init: true
+    environment:
+      - CI=true
+      - BASE_URL=${BASE_URL:-https://www.saucedemo.com}
+    volumes:
+      # reports come back to the host
+      - ./playwright-report:/app/playwright-report
+      - ./test-results:/app/test-results

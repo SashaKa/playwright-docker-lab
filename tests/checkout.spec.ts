@@ -11,7 +11,13 @@ test('standard user buys a backpack', async ({ page }) => {
   await expect(page.getByTestId('shopping-cart-badge')).toHaveText('1');
 
   await page.getByTestId('shopping-cart-link').click();
-  await expect(page.getByTestId('inventory-item-name')).toHaveText('Sauce Labs Backpack');
+  await expect(page.getByTestId('title')).toHaveText('Your Cart');
+  await expect(page).toHaveURL(/cart\.html/);
+
+  const cartItems = page.getByTestId('cart-list').getByTestId('inventory-item');
+  await expect(cartItems).toHaveCount(1);
+  await expect(cartItems.getByTestId('inventory-item-name')).toHaveText('Sauce Labs Backpack');
+
 
   await page.getByTestId('checkout').click();
   await page.getByTestId('firstName').fill('Test');
@@ -24,3 +30,4 @@ test('standard user buys a backpack', async ({ page }) => {
 
   await expect(page.getByTestId('complete-header')).toHaveText('Thank you for your order!');
 });
+
